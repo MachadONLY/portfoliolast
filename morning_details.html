@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Morning - Gabriel Machado</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        background: '#111111',
+                        surface: '#1A1A1A',
+                    },
+                    fontFamily: {
+                        sans: ['Montserrat', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #111111;
+            color: white;
+            overflow-x: hidden;
+        }
+
+        /* Lightbox Styles */
+        #lightbox {
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        #lightbox.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        #lightbox img {
+            transform: scale(0.9);
+            transition: transform 0.3s ease;
+        }
+
+        #lightbox.active img {
+            transform: scale(1);
+        }
+    </style>
+</head>
+
+<body class="min-h-screen relative flex flex-col overflow-x-hidden">
+
+    <div id="bg-watermark"
+        class="absolute top-0 right-0 w-[60vw] md:w-[40vw] pointer-events-none z-0 translate-x-1/4 -translate-y-1/3 opacity-30 text-right">
+        <img id="bg-watermark-img" src="./morning_logo.png" alt="" class="w-full h-full object-contain"
+            style="will-change: filter;">
+    </div>
+
+    <!-- Header / Nav -->
+    <header class="fixed top-0 left-0 w-full z-50 p-6 md:p-12 flex justify-between items-center pointer-events-none">
+        <!-- Logo Text -->
+        <a href="index.html"
+            class="text-xl font-medium tracking-tight pointer-events-auto hover:opacity-70 transition-opacity">
+            ← Back
+        </a>
+        <!-- Header Logo -->
+        <div class="pointer-events-auto">
+            <img id="header-logo" src="./morning_logo.png" alt="Morning Logo" class="w-20 h-20 object-contain"
+                style="will-change: filter;">
+        </div>
+    </header>
+
+    <main class="w-full pt-16 px-6 md:px-24 pb-24 relative z-10">
+        <div class="max-w-7xl mx-auto space-y-8 md:space-y-24">
+
+            <!-- Project Title & Category -->
+            <div class="space-y-4">
+                <span class="text-gray-400 uppercase tracking-widest text-xs md:text-sm font-medium">Founder</span>
+                <h1 class="text-5xl md:text-8xl font-bold leading-tight">Morning</h1>
+            </div>
+
+            <!-- Main Project Image -->
+            <div
+                class="w-full h-[40vh] md:h-[60vh] bg-gray-800 rounded-xl overflow-hidden relative transition-all duration-700">
+                <!-- Placeholder for project hero -->
+                <img src="./morning_club.jpg" alt="Project Hero" class="w-full h-full object-cover">
+            </div>
+
+            <!-- Project Content -->
+            <div class="space-y-10 md:space-y-16 mt-8 md:mt-12">
+
+                <!-- Narrative Text -->
+                <div class="text-lg text-gray-300 leading-relaxed font-light space-y-6 w-full max-w-none text-left">
+                    <p>
+                        Sou fundador da Morning, uma marca criada a partir da busca por uma vida mais intencional, com
+                        foco, presença e cuidado com o início do dia. A Morning nasce da combinação entre performance,
+                        estética e bem-estar, com a proposta de criar produtos e rituais que ajudem as pessoas a fazer
+                        escolhas mais conscientes na sua rotina.
+                    </p>
+                    <p>
+                        Minha atuação envolve todo o processo de construção da marca: da concepção do produto e do
+                        posicionamento à definição da identidade visual, comunicação e estratégia de go-to-market. No
+                        dia a dia, tomo decisões estratégicas, desenvolvo produtos e cuido para que propósito, execução
+                        e experiência final estejam sempre alinhados.
+                    </p>
+                    <p>
+                        Ao longo desse percurso, desenvolvi uma leitura mais profunda de comportamento, cultura e
+                        comunidade, equilibrando visão criativa com execução disciplinada. Essa experiência fortaleceu
+                        minha capacidade de resolver problemas sob incerteza, liderar com clareza e transformar ideias
+                        em
+                        algo concreto, construindo uma marca consistente, com significado e visão de longo prazo.
+                    </p>
+                </div>
+
+                <!-- Secondary Metadata Area -->
+                <div class="border-t border-white/10 pt-10">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-10">
+                        <div>
+                            <h3 class="text-gray-400 uppercase text-[10px] md:text-xs tracking-wider mb-2">Role</h3>
+                            <p class="text-lg md:text-xl font-medium">Founder & CEO</p>
+                        </div>
+                        <div>
+                            <h3 class="text-gray-400 uppercase text-[10px] md:text-xs tracking-wider mb-2">Timeline</h3>
+                            <p class="text-lg md:text-xl font-medium">2025 - Present</p>
+                        </div>
+                        <div>
+                            <h3 class="text-gray-400 uppercase text-[10px] md:text-xs tracking-wider mb-2">Skills</h3>
+                            <div class="text-sm md:text-base font-medium text-gray-300 flex flex-col gap-1">
+                                <span>Problem Solving</span>
+                                <span>Brand Strategy & Positioning</span>
+                                <span>Product Thinking</span>
+                                <span>Go-to-Market</span>
+                                <span>Creative Direction</span>
+                                <span>Customer Insight</span>
+                                <span>Execution & Focus</span>
+                                <span>Leadership</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Image Gallery Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 pt-12">
+                <div class="h-[300px] md:h-[400px] bg-gray-800 rounded-lg overflow-hidden relative group cursor-pointer"
+                    onclick="openLightbox('./morning_park.png')">
+                    <img src="./morning_park.png" alt="Morning Park"
+                        class="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity duration-500">
+                </div>
+                <div class="h-[300px] md:h-[400px] bg-gray-800 rounded-lg overflow-hidden relative group cursor-pointer"
+                    onclick="openLightbox('./morning_street.jpg')">
+                    <img src="./morning_street.jpg" alt="Morning Street"
+                        class="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity duration-500">
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-black py-16 px-6 md:px-24 border-t border-white/5 font-sans relative z-50">
+        <div
+            class="flex flex-col md:flex-row justify-between items-center gap-8 text-[10px] tracking-[0.2em] uppercase text-gray-500 font-light">
+            <div>
+                © 2024 <span class="text-white">Gabriel Machado</span>. Todos os direitos reservados.
+            </div>
+            <div class="flex items-center gap-10">
+                <a href="https://www.linkedin.com/in/gabrielmachadodev" target="_blank"
+                    class="hover:text-white transition-colors duration-300">LinkedIn</a>
+                <span class="w-1 h-1 bg-white/10 rounded-full"></span>
+                <span class="text-gray-600">São Paulo, BR</span>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Lightbox Modal -->
+    <div id="lightbox" class="fixed inset-0 z-[60] bg-black/90 backdrop-blur-sm flex items-center justify-center p-4"
+        onclick="closeLightbox()">
+        <img id="lightbox-img" src="" alt="Full screen view"
+            class="max-w-full max-h-full object-contain rounded-lg shadow-2xl" onclick="event.stopPropagation()">
+        <button onclick="closeLightbox()" class="absolute top-6 right-6 text-white hover:text-gray-300">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                stroke="currentColor" class="w-10 h-10">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+        </button>
+    </div>
+
+    <script>
+        const lightbox = document.getElementById('lightbox');
+        const lightboxImg = document.getElementById('lightbox-img');
+
+        function openLightbox(src) {
+            lightboxImg.src = src;
+            lightbox.classList.add('active');
+            document.body.style.overflow = 'hidden'; // Prevent scrolling
+        }
+
+        function closeLightbox() {
+            lightbox.classList.remove('active');
+            document.body.style.overflow = ''; // Restore scrolling
+            // Clear src after transition to avoid flicker if re-opened quickly
+            setTimeout(() => {
+                if (!lightbox.classList.contains('active')) lightboxImg.src = '';
+            }, 300);
+        }
+
+        // Close on Escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') closeLightbox();
+        });
+
+        // Background Scroll Animation
+        document.addEventListener('scroll', () => {
+            const watermark = document.getElementById('bg-watermark-img');
+            const headerLogo = document.getElementById('header-logo');
+
+            if (!watermark && !headerLogo) return;
+
+            const scrollY = window.scrollY;
+            const maxScroll = 500;
+            const progress = Math.min(scrollY / maxScroll, 1);
+
+            if (watermark) watermark.style.filter = `grayscale(${progress})`;
+            if (headerLogo) headerLogo.style.filter = `grayscale(${progress})`;
+        });
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gabriel Machado - Portfolio</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        background: '#111111',
+                        surface: '#1A1A1A',
+                    },
+                    fontFamily: {
+                        sans: ['Montserrat', 'sans-serif'],
+                    },
+                    fontSize: {
+                        'giant': '12rem',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #111111;
+            color: white;
+            overflow-x: hidden;
+            /* Prevent horizontal scroll from giant text */
+            scroll-behavior: smooth;
+        }
+
+        /* Custom glow effect at the bottom */
+        .bottom-glow {
+            position: fixed;
+            bottom: -20%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80vw;
+            height: 40vh;
+            background: radial-gradient(circle, rgba(200, 80, 50, 0.15) 0%, rgba(0, 0, 0, 0) 70%);
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .giant-text {
+            /* Gabriel Machado is ~15 chars. 100vw / 15 approx 6.6vw. But with tight tracking and variable char widths, 12vw might work, 
+               but to be 100% safe inside screen: ~10-11vw. */
+            font-size: clamp(2.5rem, 11vw, 16rem);
+            line-height: 0.8;
+            white-space: nowrap;
+            letter-spacing: -0.05em;
+        }
+
+        /* Hide scrollbar for cleaner look if needed */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #111;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #333;
+            border-radius: 4px;
+        }
+
+        /* Reveal Animation Styles */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s cubic-bezier(0.2, 0.8, 0.2, 1), transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Staggered entry for children */
+        .reveal-delay-1 {
+            transition-delay: 0.1s;
+        }
+
+        .reveal-delay-2 {
+            transition-delay: 0.2s;
+        }
+
+        .reveal-delay-3 {
+            transition-delay: 0.3s;
+        }
+    </style>
+</head>
+
+<body class="min-h-screen relative flex flex-col">
+
+    <!-- Ambient Background Glow -->
+    <div class="bottom-glow"></div>
+
+    <!-- Header / Nav -->
+    <header class="fixed top-0 left-0 w-full z-50 p-6 md:p-12 flex justify-between items-start pointer-events-none">
+
+        <!-- Logo Text -->
+        <div class="text-xl font-medium tracking-tight pointer-events-auto shrink-0 reveal active">
+            Gabriel Machado.
+        </div>
+
+        <!-- Navigation: Vertical List Style -->
+        <nav
+            class="pointer-events-auto flex flex-col items-end gap-1 text-sm md:text-base font-normal uppercase tracking-wide text-gray-300 reveal active reveal-delay-1">
+            <a href="#" class="hover:text-white transition-colors py-1">Home</a>
+            <a href="#about" class="hover:text-white transition-colors py-1">Sobre mim</a>
+            <a href="#portfolio-tracker" class="hover:text-white transition-colors py-1">Portfolio</a>
+        </nav>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="w-full">
+
+        <!-- HERO SECTION -->
+        <section class="min-h-screen relative w-full flex items-center justify-center overflow-hidden">
+            <!-- Left Section: Mission Text -->
+            <div
+                class="absolute left-6 md:left-12 lg:left-24 top-1/4 md:top-1/3 transform -translate-y-1/2 max-w-[80%] md:max-w-sm z-20 pointer-events-none reveal">
+                <h1 class="text-lg md:text-2xl lg:text-3xl font-light leading-relaxed text-gray-300">
+                    Minha missão é construir, seja marcas, ideias, projetos, produtos, relações e experiências. Acredito
+                    na união da intenção, estética e disciplina.
+                </h1>
+            </div>
+
+            <!-- Center: Giant Text -->
+            <div
+                class="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-full text-center z-10 select-none pointer-events-none whitespace-nowrap pb-8">
+                <span class="giant-text font-semibold text-white tracking-tighter opacity-90">Gabriel Machado</span>
+            </div>
+
+
+        </section>
+
+        <!-- ABOUT SECTION -->
+        <section id="about"
+            class="min-h-screen w-full bg-[#111] flex items-center justify-center p-6 md:p-24 relative z-20 overflow-hidden">
+            <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 items-center relative">
+
+                <!-- Left: Portrait -->
+                <div class="relative w-full h-[60vh] md:h-[80vh] flex items-center justify-center">
+                    <!-- Background Text -->
+                    <div
+                        class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[200%] text-center z-0 pointer-events-none select-none">
+                        <span
+                            class="text-[clamp(6rem,20vw,20rem)] font-bold text-[#222] opacity-60 whitespace-nowrap leading-none">Gabriel
+                            Machado</span>
+                    </div>
+
+                    <!-- Image -->
+                    <img src="portrait_bw.jpg" alt="About Gabriel"
+                        class="relative z-10 w-full h-full object-cover rounded-sm grayscale hover:grayscale-0 transition-all duration-700 shadow-2xl">
+                </div>
+
+                <!-- Right: Content -->
+                <div class="space-y-8 relative z-10 reveal">
+                    <h2 class="text-5xl md:text-7xl font-bold tracking-tight text-white reveal-delay-1">Sobre mim</h2>
+
+                    <div class="space-y-6 text-gray-400 text-lg leading-relaxed font-light reveal-delay-2">
+                        <p class="text-white font-normal text-2xl">
+                            Olá, sou o Gabriel Machado, apaixonado pela criação e escala de ideias, projetos, marcas e
+                            estratégias.
+                        </p>
+                        <p>
+                            Nascido e criado em São Paulo, cresci imerso em criatividade, tendências culturais e
+                            inovação.
+                        </p>
+                        <p>
+                            Hoje curso Engenharia de Software na FIAP e, nos últimos anos, tive a oportunidade de
+                            colaborar com big techs, participar de projetos complexos com grandes marcas, iniciativas
+                            com comunidades relevantes e atuar em desafios que unem profundidade técnica, visão
+                            comercial e uma compreensão real das necessidades das pessoas.
+                        </p>
+
+                    </div>
+
+                    <!-- LinkedIn Icon -->
+                    <div class="pt-4">
+                        <a href="https://www.linkedin.com/in/gabrielmachadodev" target="_blank"
+                            class="inline-flex items-center group">
+                            <div
+                                class="w-12 h-12 rounded-full border border-white/20 flex items-center justify-center group-hover:bg-white group-hover:text-black transition-all duration-300">
+                                <span class="font-bold text-sm">in</span>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PORTFOLIO SCROLL SECTION -->
+        <section id="portfolio-tracker" class="relative h-auto md:h-[250vh] bg-black">
+            <div class="md:sticky top-0 h-auto md:h-screen w-full flex flex-col md:flex-row md:overflow-hidden">
+
+                <!-- Left: Navigation List (Desktop titles, hidden/different on mobile) -->
+                <div
+                    class="hidden md:flex w-full md:w-1/2 bg-[#0c0c0c] flex-col justify-center px-6 md:pl-24 relative z-20">
+                    <div class="flex items-baseline gap-4 mb-2 reveal">
+                        <h2 class="text-3xl md:text-4xl font-bold text-white shrink-0">Portfolio</h2>
+                        <div class="h-[1px] bg-white/20 w-16 md:w-32 hidden md:block reveal-delay-1"></div>
+                    </div>
+
+                    <div class="mt-8 space-y-4 reveal reveal-delay-2">
+                        <!-- Project Items -->
+                        <div class="project-item text-4xl md:text-6xl font-semibold text-gray-800 transition-colors duration-300 cursor-default"
+                            data-index="0">Red Hat</div>
+                        <div class="project-item text-4xl md:text-6xl font-semibold text-gray-800 transition-colors duration-300 cursor-default"
+                            data-index="1">Morning</div>
+                    </div>
+                </div>
+
+                <!-- Mobile view: Stacked content -->
+                <div class="md:hidden w-full bg-[#0c0c0c] px-6 py-24 space-y-16 relative z-20">
+                    <h2 class="text-4xl font-bold text-white mb-8 reveal">Portfolio</h2>
+
+                    <!-- Mobile Red Hat -->
+                    <div class="space-y-4 reveal">
+                        <div class="aspect-square bg-gray-900 rounded-xl overflow-hidden shadow-2xl">
+                            <img src="./redhat_summit.jpg" class="w-full h-full object-cover">
+                        </div>
+                        <div class="space-y-4">
+                            <h3 class="text-white text-3xl font-bold">Red Hat</h3>
+                            <p class="text-gray-400">Soluções open source empresariais e apresentações em summits.</p>
+                            <a href="redhat_details.html"
+                                class="inline-block px-8 py-3 bg-white text-black text-sm font-bold rounded-full">Saiba
+                                mais</a>
+                        </div>
+                    </div>
+
+                    <!-- Mobile Morning -->
+                    <div class="space-y-4 reveal">
+                        <div class="aspect-square bg-gray-900 rounded-xl overflow-hidden shadow-2xl">
+                            <img src="./morning_club.jpg" class="w-full h-full object-cover">
+                        </div>
+                        <div class="space-y-4">
+                            <h3 class="text-white text-3xl font-bold">Morning</h3>
+                            <p class="text-gray-400">Produtos e rituais intencionais para uma vida disciplinada.</p>
+                            <a href="morning_details.html"
+                                class="inline-block px-8 py-3 bg-white text-black text-sm font-bold rounded-full">Saiba
+                                mais</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right: Project Images -->
+                <div class="hidden md:block w-1/2 relative bg-gray-900 h-full z-30">
+
+                    <!-- Image 1: Red Hat -->
+                    <div class="portfolio-image opacity-100 absolute inset-0 transition-opacity duration-700 ease-in-out"
+                        data-index="0">
+                        <!-- Dominant Color: Red -->
+                        <img src="./redhat_summit.jpg" class="w-full h-full object-cover"
+                            style="box-shadow: -120px 0 250px rgba(200, 0, 0, 0.6);">
+                        <!-- Overlay Text -->
+                        <div
+                            class="absolute bottom-12 right-12 text-right max-w-sm bg-black/50 backdrop-blur-md p-6 rounded-xl border border-white/10">
+                            <h3 class="text-white text-xl font-bold mb-2">Red Hat</h3>
+                            <p class="text-gray-300 text-sm mb-4">Soluções open source empresariais e apresentações em
+                                summits.</p>
+                            <a href="redhat_details.html"
+                                class="inline-block px-6 py-2 bg-white text-black text-xs font-bold rounded-full hover:scale-105 transition-transform">Saiba
+                                mais</a>
+                        </div>
+                    </div>
+
+                    <!-- Image 2: Morning -->
+                    <div class="portfolio-image opacity-0 pointer-events-none absolute inset-0 transition-opacity duration-700 ease-in-out"
+                        data-index="1">
+                        <!-- Dominant Color: Cool Blue/Daylight -->
+                        <img src="./morning_club.jpg" class="w-full h-full object-cover"
+                            style="box-shadow: -120px 0 250px rgba(255, 255, 255, 0.5);">
+                        <div
+                            class="absolute bottom-12 right-12 text-right max-w-sm bg-black/50 backdrop-blur-md p-6 rounded-xl border border-white/10">
+                            <h3 class="text-white text-xl font-bold mb-2">Morning</h3>
+                            <p class="text-gray-300 text-sm mb-4">Produtos e rituais intencionais para uma vida
+                                disciplinada.</p>
+                            <a href="morning_details.html"
+                                class="inline-block px-6 py-2 bg-white text-black text-xs font-bold rounded-full hover:scale-105 transition-transform">Saiba
+                                mais</a>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- Scroll Logic Script -->
+        <script>
+            // --- LUXURIOUS SCROLL-SNAP CONTROLLER ---
+            let isAnimating = false;
+            let currentSectionIndex = 0;
+
+            function getSections() {
+                const portfolio = document.getElementById('portfolio-tracker');
+                const about = document.getElementById('about');
+                const hero = document.querySelector('section:first-of-type'); // Or similar
+                const speaking = document.getElementById('speaking');
+                const connect = document.getElementById('connect');
+
+                // Helper to get absolute scroll position
+                const getAbsTop = (el) => el.getBoundingClientRect().top + window.pageYOffset;
+
+                const pTop = getAbsTop(portfolio);
+                const pHeight = portfolio.offsetHeight;
+                const vh = window.innerHeight;
+                const pScrollable = pHeight - vh;
+
+                return [
+                    { id: 'hero', pos: 0 },
+                    { id: 'about', pos: getAbsTop(about) },
+                    { id: 'portfolio-redhat', pos: pTop },
+                    { id: 'portfolio-morning', pos: pTop + pScrollable * 0.75 },
+                    { id: 'speaking', pos: getAbsTop(speaking) },
+                    { id: 'connect', pos: getAbsTop(connect) },
+                    { id: 'footer', pos: document.documentElement.scrollHeight - window.innerHeight }
+                ];
+            }
+
+            function smoothScrollTo(targetPos) {
+                if (isAnimating) return;
+                isAnimating = true;
+
+                const startPosition = window.pageYOffset;
+                const distance = targetPos - startPosition;
+                let startTime = null;
+                const duration = 1000; // Faster, more direct "jump"
+
+                function animation(currentTime) {
+                    if (startTime === null) startTime = currentTime;
+                    const timeElapsed = currentTime - startTime;
+                    const run = easeInOutExpo(timeElapsed, startPosition, distance, duration);
+                    window.scrollTo(0, run);
+                    if (timeElapsed < duration) {
+                        requestAnimationFrame(animation);
+                    } else {
+                        isAnimating = false;
+                    }
+                }
+                requestAnimationFrame(animation);
+            }
+
+            // Detect current section index based on scroll position
+            function updateSectionIndex() {
+                if (isAnimating) return;
+                const sections = getSections();
+                const scrollPos = window.pageYOffset + 10;
+                for (let i = sections.length - 1; i >= 0; i--) {
+                    if (scrollPos >= sections[i].pos) {
+                        currentSectionIndex = i;
+                        break;
+                    }
+                }
+            }
+
+            window.addEventListener('wheel', (e) => {
+                if (isAnimating) {
+                    e.preventDefault();
+                    return;
+                }
+
+                const sections = getSections();
+                if (e.deltaY > 20) { // Scroll Down
+                    if (currentSectionIndex < sections.length - 1) {
+                        e.preventDefault();
+                        currentSectionIndex++;
+                        smoothScrollTo(sections[currentSectionIndex].pos);
+                    }
+                } else if (e.deltaY < -20) { // Scroll Up
+                    if (currentSectionIndex > 0) {
+                        e.preventDefault();
+                        currentSectionIndex--;
+                        smoothScrollTo(sections[currentSectionIndex].pos);
+                    }
+                }
+            }, { passive: false });
+
+            // Keyboard navigation
+            window.addEventListener('keydown', (e) => {
+                if (isAnimating) return;
+                const sections = getSections();
+                if (e.key === 'ArrowDown') {
+                    if (currentSectionIndex < sections.length - 1) {
+                        currentSectionIndex++;
+                        smoothScrollTo(sections[currentSectionIndex].pos);
+                    }
+                } else if (e.key === 'ArrowUp') {
+                    if (currentSectionIndex > 0) {
+                        currentSectionIndex--;
+                        smoothScrollTo(sections[currentSectionIndex].pos);
+                    }
+                }
+            });
+
+            window.addEventListener('scroll', updateSectionIndex);
+
+            // --- DESTRUCTIVE/FORCED NAVIGATION (Decision Logic) ---
+            let touchStartY = 0;
+
+            function handleDirectionalNav(direction) {
+                if (isAnimating) return;
+                const sections = getSections();
+
+                if (direction === 'down') {
+                    if (currentSectionIndex < sections.length - 1) {
+                        currentSectionIndex++;
+                        smoothScrollTo(sections[currentSectionIndex].pos);
+                    }
+                } else if (direction === 'up') {
+                    if (currentSectionIndex > 0) {
+                        currentSectionIndex--;
+                        smoothScrollTo(sections[currentSectionIndex].pos);
+                    }
+                }
+            }
+
+            // Wheel (Mouse/Trackpad)
+            window.addEventListener('wheel', (e) => {
+                // Ignore small movements to prevent accidental fire on trackpads
+                if (Math.abs(e.deltaY) < 5) return;
+
+                e.preventDefault(); // Always prevent natural scroll for forced snap
+                handleDirectionalNav(e.deltaY > 0 ? 'down' : 'up');
+            }, { passive: false });
+
+            // Touch Support (iOS/Android)
+            window.addEventListener('touchstart', (e) => {
+                touchStartY = e.touches[0].clientY;
+            }, { passive: true });
+
+            window.addEventListener('touchmove', (e) => {
+                if (isAnimating) e.preventDefault();
+            }, { passive: false });
+
+            window.addEventListener('touchend', (e) => {
+                const touchEndY = e.changedTouches[0].clientY;
+                const deltaY = touchStartY - touchEndY;
+
+                if (Math.abs(deltaY) > 50) { // Swipe threshold
+                    handleDirectionalNav(deltaY > 0 ? 'down' : 'up');
+                }
+            }, { passive: true });
+
+            // Keyboard navigation
+            window.addEventListener('keydown', (e) => {
+                if (isAnimating) return;
+                if (e.key === 'ArrowDown') handleDirectionalNav('down');
+                if (e.key === 'ArrowUp') handleDirectionalNav('up');
+            });
+            // --- END SCROLL-SNAP CONTROLLER ---
+
+            // Simple Scroll Tracker for Portfolio (Controls Image/Text switching)
+            function updatePortfolioUI() {
+                const container = document.getElementById('portfolio-tracker');
+                const projects = document.querySelectorAll('.project-item');
+                const images = document.querySelectorAll('.portfolio-image');
+
+                if (!container) return;
+
+                const rect = container.getBoundingClientRect();
+                const viewHeight = window.innerHeight;
+
+                const scrollableHeight = rect.height - viewHeight;
+                const scrolled = -rect.top;
+
+                let progress = scrolled / scrollableHeight;
+                if (progress < 0) progress = 0;
+                if (progress > 1) progress = 1;
+
+                const totalProjects = 2;
+                let activeIndex = Math.floor(progress * totalProjects);
+                if (activeIndex >= totalProjects) activeIndex = totalProjects - 1;
+
+                if (rect.top <= viewHeight && rect.bottom >= 0) {
+                    projects.forEach((el, idx) => {
+                        if (idx === activeIndex) {
+                            el.classList.remove('text-gray-800');
+                            el.classList.add('text-white');
+                        } else {
+                            el.classList.add('text-gray-800');
+                            el.classList.remove('text-white');
+                        }
+                    });
+
+                    images.forEach((img, idx) => {
+                        if (idx === activeIndex) {
+                            img.classList.remove('opacity-0', 'pointer-events-none');
+                            img.classList.add('opacity-100', 'pointer-events-auto');
+                        } else {
+                            img.classList.add('opacity-0', 'pointer-events-none');
+                            img.classList.remove('opacity-100', 'pointer-events-auto');
+                        }
+                    });
+                }
+            }
+
+            window.addEventListener('scroll', updatePortfolioUI);
+
+            // Reveal Animation Observer
+            document.addEventListener('DOMContentLoaded', () => {
+                const revealObserver = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            entry.target.classList.add('active');
+                        }
+                    });
+                }, { threshold: 0.1 });
+
+                document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+            });
+
+            // EaseInOutExpo function for a "luxurious" feel
+            function easeInOutExpo(t, b, c, d) {
+                if (t == 0) return b;
+                if (t == d) return b + c;
+                if ((t /= d / 2) < 1) return c / 2 * Math.pow(2, 10 * (t - 1)) + b;
+                return c / 2 * (-Math.pow(2, -10 * --t) + 2) + b;
+            }
+
+            // Custom Smooth Scroll Easing for Links
+            document.addEventListener('DOMContentLoaded', () => {
+                document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                    anchor.addEventListener('click', function (e) {
+                        e.preventDefault();
+                        const targetId = this.getAttribute('href');
+                        if (targetId === '#') {
+                            smoothScrollTo(0);
+                            return;
+                        }
+                        const targetElement = document.querySelector(targetId);
+                        if (targetElement) {
+                            smoothScrollTo(targetElement.offsetTop);
+                        }
+                    });
+                });
+            });
+
+            // Subtle Parallax
+            window.addEventListener('scroll', () => {
+                const scrolled = window.pageYOffset;
+                const glow = document.querySelector('.bottom-glow');
+                const giantText = document.querySelector('.giant-text');
+
+                if (glow) glow.style.transform = `translateX(-50%) translateY(${scrolled * 0.1}px)`;
+                if (giantText) giantText.style.transform = `translateY(${scrolled * -0.05}px)`;
+            });
+        </script>
+
+        <!-- FOOTER SECTIONS: Speaking & Connect with Unified Glow -->
+        <div class="relative bg-[#1A1A1A] overflow-hidden">
+
+            <!-- Ultra-Elegant Unified Orange Glow -->
+            <div class="absolute inset-0 pointer-events-none z-0">
+                <!-- Soft Environmental Wash (Wide & Subtle) -->
+                <div
+                    class="absolute top-[20%] right-[-10%] w-[120vw] h-[160vh] bg-[radial-gradient(circle_at_80%_0%,rgba(255,100,20,0.12)_0%,rgba(255,80,0,0.05)_40%,transparent_80%)] mix-blend-screen blur-[120px]">
+                </div>
+
+                <!-- Core Light Leak (Under the Bust) -->
+                <div
+                    class="absolute top-[35%] right-[5%] w-[60vw] h-[80vh] bg-[radial-gradient(circle_at_center,rgba(255,70,0,0.18)_0%,rgba(255,50,0,0.05)_50%,transparent_100%)] mix-blend-screen blur-[90px] opacity-80">
+                </div>
+
+                <!-- Descent Warmth (Lower Page) -->
+                <div
+                    class="absolute bottom-0 right-0 w-[100vw] h-[100vh] bg-[radial-gradient(circle_at_bottom_right,rgba(255,60,0,0.15)_0%,rgba(255,40,0,0.02)_60%,transparent_100%)] mix-blend-screen blur-[100px]">
+                </div>
+            </div>
+
+            <!-- SPEAKING SECTION -->
+            <section id="speaking"
+                class="py-24 md:py-32 w-full relative flex items-center justify-center px-6 md:px-24 z-10">
+
+                <div class="max-w-7xl relative z-10 grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+                    <!-- Left: Text -->
+                    <div class="reveal">
+                        <h2 class="text-5xl md:text-7xl font-bold text-white mb-4 font-sans reveal-delay-1">Notas</h2>
+                        <p class="text-gray-400 text-lg md:text-xl font-light mb-16 font-sans reveal-delay-2">Aquilo na
+                            qual Acredito
+                        </p>
+
+                        <p class="text-3xl md:text-5xl font-medium leading-tight text-gray-300 mb-8 reveal-delay-3">
+                            "Somos aquilo que fazemos repetidamente. A excelência não é um ato, mas um hábito."
+                        </p>
+                        <p class="text-lg md:text-xl text-gray-500 font-light reveal-delay-3">
+                            — Will Durant (parafraseando ideias de Aristóteles)
+                        </p>
+                    </div>
+
+                    <!-- Right: Image -->
+                    <div class="relative flex justify-center md:justify-end reveal reveal-delay-2">
+                        <img src="aristotle_bust_final.png" alt="Aristotle Bust"
+                            class="w-[140%] max-w-none object-contain drop-shadow-2xl translate-x-[15%]">
+                    </div>
+                </div>
+            </section>
+
+            <!-- CONNECT SECTION -->
+            <section id="connect" class="min-h-screen w-full relative flex items-center px-6 md:px-24 z-10">
+
+                <div class="max-w-3xl relative z-10 font-sans reveal">
+                    <h2 class="text-5xl md:text-7xl font-bold text-white mb-8 tracking-tight reveal-delay-1">Let’s
+                        connect!</h2>
+                    <p class="text-gray-400 text-lg md:text-2xl font-light leading-relaxed reveal-delay-2">
+                        Seja para colaborarmos em projetos, trocar ideias ou explorar caminhos para criar e escalar algo
+                        com
+                        intenção, estou a disposição.
+                    </p>
+                </div>
+            </section>
+
+        </div>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="bg-[#111] text-gray-500 py-8 px-6 md:px-24 border-t border-white/5 font-sans">
+        <div class="flex flex-col md:flex-row justify-between items-center gap-4 text-sm font-light">
+            <div>
+                &copy; Gabriel Machado. All rights reserved.
+            </div>
+            <div class="flex gap-6">
+                <a href="https://www.linkedin.com/in/gabrielmachadodev" target="_blank"
+                    class="hover:text-white transition-colors">LinkedIn</a>
+            </div>
+        </div>
+    </footer>
