@@ -30,26 +30,15 @@
     </script>
     <style>
         html {
-            scroll-snap-type: y mandatory;
             scroll-behavior: smooth;
         }
 
         body {
             background-color: #111111;
             color: white;
+            /* Allow natural scrolling without restrictions */
             overflow-x: hidden;
-            /* Allow native momentum scrolling */
             -webkit-overflow-scrolling: touch;
-        }
-
-        section {
-            scroll-snap-align: start;
-            scroll-snap-stop: always;
-        }
-
-        /* Portfolio tracker needs special handling because it's taller than the viewport on desktop */
-        #portfolio-tracker {
-            scroll-snap-align: start;
         }
 
         /* Custom glow effect at the bottom */
@@ -67,7 +56,7 @@
         }
 
         .giant-text {
-            font-size: clamp(2.5rem, 11vw, 16rem);
+            font-size: clamp(2rem, 11vw, 16rem);
             line-height: 0.8;
             white-space: nowrap;
             letter-spacing: -0.05em;
@@ -113,6 +102,86 @@
         .reveal-delay-3 {
             transition-delay: 0.3s;
         }
+
+        /* Orange Glow Effect */
+        .orange-glow {
+            text-shadow: 0 0 30px rgba(255, 100, 0, 0.3), 0 0 60px rgba(255, 80, 0, 0.1);
+        }
+
+        /* Hamburger Menu */
+        #hamburger {
+            width: 30px;
+            height: 20px;
+            position: relative;
+            cursor: pointer;
+            z-index: 100;
+        }
+
+        #hamburger span {
+            display: block;
+            position: absolute;
+            height: 2px;
+            width: 100%;
+            background: white;
+            border-radius: 9px;
+            opacity: 1;
+            left: 0;
+            transform: rotate(0deg);
+            transition: .25s ease-in-out;
+        }
+
+        #hamburger span:nth-child(1) {
+            top: 0px;
+        }
+
+        #hamburger span:nth-child(2) {
+            top: 9px;
+        }
+
+        #hamburger span:nth-child(3) {
+            top: 18px;
+        }
+
+        #hamburger.active span:nth-child(1) {
+            top: 9px;
+            transform: rotate(135deg);
+        }
+
+        #hamburger.active span:nth-child(2) {
+            opacity: 0;
+            left: -60px;
+        }
+
+        #hamburger.active span:nth-child(3) {
+            top: 9px;
+            transform: rotate(-135deg);
+        }
+
+        /* Mobile Menu Overlay */
+        #mobile-menu {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(10, 10, 10, 0.98);
+            z-index: 90;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 2rem;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.4s ease, transform 0.4s ease;
+            transform: translateY(-20px);
+        }
+
+        #mobile-menu.active {
+            opacity: 1;
+            pointer-events: auto;
+            transform: translateY(0);
+        }
     </style>
 </head>
 
@@ -129,20 +198,26 @@
             Gabriel Machado.
         </div>
 
-        <!-- Navigation: Vertical List Style -->
-        <nav
-            class="pointer-events-auto flex flex-col items-end gap-1 text-sm md:text-base font-normal uppercase tracking-wide text-gray-300 reveal active reveal-delay-1">
-            <a href="#" class="hover:text-white transition-colors py-1">Home</a>
-            <a href="#about" class="hover:text-white transition-colors py-1">Sobre mim</a>
-            <a href="#portfolio-tracker" class="hover:text-white transition-colors py-1">Portfolio</a>
-        </nav>
+        <!-- Hamburger Button (Global) -->
+        <button id="hamburger" class="pointer-events-auto ml-auto" aria-label="Menu">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
     </header>
+
+    <!-- Mobile Menu Overlay -->
+    <div id="mobile-menu">
+        <a href="#" class="mobile-link text-3xl font-bold uppercase tracking-widest text-white">Home</a>
+        <a href="#about" class="mobile-link text-3xl font-bold uppercase tracking-widest text-white">Sobre mim</a>
+        <a href="#portfolio" class="mobile-link text-3xl font-bold uppercase tracking-widest text-white">Portfolio</a>
+    </div>
 
     <!-- Main Content Area -->
     <main class="w-full">
 
         <!-- HERO SECTION -->
-        <section class="min-h-screen relative w-full flex items-center justify-center overflow-hidden">
+        <section class="min-h-screen relative w-full flex items-center justify-center">
             <!-- Left Section: Mission Text -->
             <div
                 class="absolute left-6 md:left-12 lg:left-24 top-1/4 md:top-1/3 transform -translate-y-1/2 max-w-[80%] md:max-w-sm z-20 pointer-events-none reveal">
@@ -155,7 +230,8 @@
             <!-- Center: Giant Text -->
             <div
                 class="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-full text-center z-10 select-none pointer-events-none whitespace-nowrap pb-8">
-                <span class="giant-text font-semibold text-white tracking-tighter opacity-90">Gabriel Machado</span>
+                <span class="giant-text font-semibold text-white tracking-tighter opacity-90 orange-glow">Gabriel
+                    Machado</span>
             </div>
 
 
@@ -163,7 +239,7 @@
 
         <!-- ABOUT SECTION -->
         <section id="about"
-            class="min-h-screen w-full bg-[#111] flex items-center justify-center p-6 md:p-24 relative z-20 overflow-hidden">
+            class="min-h-screen w-full bg-[#111] flex items-center justify-center p-6 md:p-24 relative z-20">
             <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 items-center relative">
 
                 <!-- Left: Portrait -->
@@ -217,9 +293,9 @@
             </div>
         </section>
 
-        <!-- PORTFOLIO SCROLL SECTION -->
-        <section id="portfolio-tracker" class="relative h-auto md:h-[250vh] bg-black">
-            <div class="md:sticky top-0 h-auto md:h-screen w-full flex flex-col md:flex-row md:overflow-hidden">
+        <!-- Portfolio Section: Original Side-by-Side Sticky Layout -->
+        <section id="portfolio-tracker" class="relative bg-[#0c0c0c] min-h-[250vh] flex flex-col md:flex-row z-30">
+            <div class="sticky top-0 h-screen w-full flex flex-col md:flex-row overflow-hidden">
 
                 <!-- Left: Navigation List (Desktop titles, hidden/different on mobile) -->
                 <div
@@ -313,16 +389,8 @@
             </div>
         </section>
 
-        <!-- Scroll Logic Script -->
+        <!-- Portfolio Logic Script -->
         <script>
-            // Simple Smooth Scroll for Anchor Links
-            function smoothScrollTo(targetPos) {
-                window.scrollTo({
-                    top: targetPos,
-                    behavior: 'smooth'
-                });
-            }
-
             // Simple Scroll Tracker for Portfolio (Controls Image/Text switching)
             function updatePortfolioUI() {
                 const container = document.getElementById('portfolio-tracker');
@@ -370,7 +438,7 @@
 
             window.addEventListener('scroll', updatePortfolioUI);
 
-            // Reveal Animation Observer
+            // Reveal Animation Observer (Hardware Accelerated)
             document.addEventListener('DOMContentLoaded', () => {
                 const revealObserver = new IntersectionObserver((entries) => {
                     entries.forEach(entry => {
@@ -383,24 +451,6 @@
                 document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
             });
 
-            // Smooth Scroll Easing for Links
-            document.addEventListener('DOMContentLoaded', () => {
-                document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-                    anchor.addEventListener('click', function (e) {
-                        e.preventDefault();
-                        const targetId = this.getAttribute('href');
-                        if (targetId === '#') {
-                            smoothScrollTo(0);
-                            return;
-                        }
-                        const targetElement = document.querySelector(targetId);
-                        if (targetElement) {
-                            smoothScrollTo(targetElement.offsetTop);
-                        }
-                    });
-                });
-            });
-
             // Subtle Parallax
             window.addEventListener('scroll', () => {
                 const scrolled = window.pageYOffset;
@@ -409,6 +459,29 @@
 
                 if (glow) glow.style.transform = `translateX(-50%) translateY(${scrolled * 0.1}px)`;
                 if (giantText) giantText.style.transform = `translateY(${scrolled * -0.05}px)`;
+            });
+
+            // Mobile Menu Toggle
+            const hamburger = document.getElementById('hamburger');
+            const mobileMenu = document.getElementById('mobile-menu');
+            const mobileLinks = document.querySelectorAll('.mobile-link');
+
+            function toggleMenu() {
+                hamburger.classList.toggle('active');
+                mobileMenu.classList.toggle('active');
+                document.body.style.overflow = mobileMenu.classList.contains('active') ? 'hidden' : '';
+            }
+
+            if (hamburger) {
+                hamburger.addEventListener('click', toggleMenu);
+            }
+
+            mobileLinks.forEach(link => {
+                link.addEventListener('click', () => {
+                    hamburger.classList.remove('active');
+                    mobileMenu.classList.remove('active');
+                    document.body.style.overflow = '';
+                });
             });
         </script>
 
@@ -454,9 +527,10 @@
                     </div>
 
                     <!-- Right: Image -->
-                    <div class="relative flex justify-center md:justify-end reveal reveal-delay-2">
+                    <div
+                        class="relative flex justify-center md:justify-end reveal reveal-delay-2 overflow-hidden md:overflow-visible">
                         <img src="aristotle_bust_final.png" alt="Aristotle Bust"
-                            class="w-[140%] max-w-none object-contain drop-shadow-2xl translate-x-[15%]">
+                            class="w-[110%] md:w-[140%] max-w-none object-contain drop-shadow-2xl md:translate-x-[15%]">
                     </div>
                 </div>
             </section>
