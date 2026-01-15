@@ -29,12 +29,27 @@
         }
     </script>
     <style>
+        html {
+            scroll-snap-type: y mandatory;
+            scroll-behavior: smooth;
+        }
+
         body {
             background-color: #111111;
             color: white;
             overflow-x: hidden;
-            /* Prevent horizontal scroll from giant text */
-            scroll-behavior: smooth;
+            /* Allow native momentum scrolling */
+            -webkit-overflow-scrolling: touch;
+        }
+
+        section {
+            scroll-snap-align: start;
+            scroll-snap-stop: always;
+        }
+
+        /* Portfolio tracker needs special handling because it's taller than the viewport on desktop */
+        #portfolio-tracker {
+            scroll-snap-align: start;
         }
 
         /* Custom glow effect at the bottom */
@@ -48,15 +63,15 @@
             background: radial-gradient(circle, rgba(200, 80, 50, 0.15) 0%, rgba(0, 0, 0, 0) 70%);
             z-index: 0;
             pointer-events: none;
+            will-change: transform;
         }
 
         .giant-text {
-            /* Gabriel Machado is ~15 chars. 100vw / 15 approx 6.6vw. But with tight tracking and variable char widths, 12vw might work, 
-               but to be 100% safe inside screen: ~10-11vw. */
             font-size: clamp(2.5rem, 11vw, 16rem);
             line-height: 0.8;
             white-space: nowrap;
             letter-spacing: -0.05em;
+            will-change: transform;
         }
 
         /* Hide scrollbar for cleaner look if needed */
@@ -78,6 +93,7 @@
             opacity: 0;
             transform: translateY(30px);
             transition: opacity 0.8s cubic-bezier(0.2, 0.8, 0.2, 1), transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+            will-change: transform, opacity;
         }
 
         .reveal.active {
@@ -299,167 +315,13 @@
 
         <!-- Scroll Logic Script -->
         <script>
-            // --- LUXURIOUS SCROLL-SNAP CONTROLLER ---
-            let isAnimating = false;
-            let currentSectionIndex = 0;
-
-            function getSections() {
-                const portfolio = document.getElementById('portfolio-tracker');
-                const about = document.getElementById('about');
-                const hero = document.querySelector('section:first-of-type'); // Or similar
-                const speaking = document.getElementById('speaking');
-                const connect = document.getElementById('connect');
-
-                // Helper to get absolute scroll position
-                const getAbsTop = (el) => el.getBoundingClientRect().top + window.pageYOffset;
-
-                const pTop = getAbsTop(portfolio);
-                const pHeight = portfolio.offsetHeight;
-                const vh = window.innerHeight;
-                const pScrollable = pHeight - vh;
-
-                return [
-                    { id: 'hero', pos: 0 },
-                    { id: 'about', pos: getAbsTop(about) },
-                    { id: 'portfolio-redhat', pos: pTop },
-                    { id: 'portfolio-morning', pos: pTop + pScrollable * 0.75 },
-                    { id: 'speaking', pos: getAbsTop(speaking) },
-                    { id: 'connect', pos: getAbsTop(connect) },
-                    { id: 'footer', pos: document.documentElement.scrollHeight - window.innerHeight }
-                ];
-            }
-
+            // Simple Smooth Scroll for Anchor Links
             function smoothScrollTo(targetPos) {
-                if (isAnimating) return;
-                isAnimating = true;
-
-                const startPosition = window.pageYOffset;
-                const distance = targetPos - startPosition;
-                let startTime = null;
-                const duration = 1000; // Faster, more direct "jump"
-
-                function animation(currentTime) {
-                    if (startTime === null) startTime = currentTime;
-                    const timeElapsed = currentTime - startTime;
-                    const run = easeInOutExpo(timeElapsed, startPosition, distance, duration);
-                    window.scrollTo(0, run);
-                    if (timeElapsed < duration) {
-                        requestAnimationFrame(animation);
-                    } else {
-                        isAnimating = false;
-                    }
-                }
-                requestAnimationFrame(animation);
+                window.scrollTo({
+                    top: targetPos,
+                    behavior: 'smooth'
+                });
             }
-
-            // Detect current section index based on scroll position
-            function updateSectionIndex() {
-                if (isAnimating) return;
-                const sections = getSections();
-                const scrollPos = window.pageYOffset + 10;
-                for (let i = sections.length - 1; i >= 0; i--) {
-                    if (scrollPos >= sections[i].pos) {
-                        currentSectionIndex = i;
-                        break;
-                    }
-                }
-            }
-
-            window.addEventListener('wheel', (e) => {
-                if (isAnimating) {
-                    e.preventDefault();
-                    return;
-                }
-
-                const sections = getSections();
-                if (e.deltaY > 20) { // Scroll Down
-                    if (currentSectionIndex < sections.length - 1) {
-                        e.preventDefault();
-                        currentSectionIndex++;
-                        smoothScrollTo(sections[currentSectionIndex].pos);
-                    }
-                } else if (e.deltaY < -20) { // Scroll Up
-                    if (currentSectionIndex > 0) {
-                        e.preventDefault();
-                        currentSectionIndex--;
-                        smoothScrollTo(sections[currentSectionIndex].pos);
-                    }
-                }
-            }, { passive: false });
-
-            // Keyboard navigation
-            window.addEventListener('keydown', (e) => {
-                if (isAnimating) return;
-                const sections = getSections();
-                if (e.key === 'ArrowDown') {
-                    if (currentSectionIndex < sections.length - 1) {
-                        currentSectionIndex++;
-                        smoothScrollTo(sections[currentSectionIndex].pos);
-                    }
-                } else if (e.key === 'ArrowUp') {
-                    if (currentSectionIndex > 0) {
-                        currentSectionIndex--;
-                        smoothScrollTo(sections[currentSectionIndex].pos);
-                    }
-                }
-            });
-
-            window.addEventListener('scroll', updateSectionIndex);
-
-            // --- DESTRUCTIVE/FORCED NAVIGATION (Decision Logic) ---
-            let touchStartY = 0;
-
-            function handleDirectionalNav(direction) {
-                if (isAnimating) return;
-                const sections = getSections();
-
-                if (direction === 'down') {
-                    if (currentSectionIndex < sections.length - 1) {
-                        currentSectionIndex++;
-                        smoothScrollTo(sections[currentSectionIndex].pos);
-                    }
-                } else if (direction === 'up') {
-                    if (currentSectionIndex > 0) {
-                        currentSectionIndex--;
-                        smoothScrollTo(sections[currentSectionIndex].pos);
-                    }
-                }
-            }
-
-            // Wheel (Mouse/Trackpad)
-            window.addEventListener('wheel', (e) => {
-                // Ignore small movements to prevent accidental fire on trackpads
-                if (Math.abs(e.deltaY) < 5) return;
-
-                e.preventDefault(); // Always prevent natural scroll for forced snap
-                handleDirectionalNav(e.deltaY > 0 ? 'down' : 'up');
-            }, { passive: false });
-
-            // Touch Support (iOS/Android)
-            window.addEventListener('touchstart', (e) => {
-                touchStartY = e.touches[0].clientY;
-            }, { passive: true });
-
-            window.addEventListener('touchmove', (e) => {
-                if (isAnimating) e.preventDefault();
-            }, { passive: false });
-
-            window.addEventListener('touchend', (e) => {
-                const touchEndY = e.changedTouches[0].clientY;
-                const deltaY = touchStartY - touchEndY;
-
-                if (Math.abs(deltaY) > 50) { // Swipe threshold
-                    handleDirectionalNav(deltaY > 0 ? 'down' : 'up');
-                }
-            }, { passive: true });
-
-            // Keyboard navigation
-            window.addEventListener('keydown', (e) => {
-                if (isAnimating) return;
-                if (e.key === 'ArrowDown') handleDirectionalNav('down');
-                if (e.key === 'ArrowUp') handleDirectionalNav('up');
-            });
-            // --- END SCROLL-SNAP CONTROLLER ---
 
             // Simple Scroll Tracker for Portfolio (Controls Image/Text switching)
             function updatePortfolioUI() {
@@ -521,15 +383,7 @@
                 document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
             });
 
-            // EaseInOutExpo function for a "luxurious" feel
-            function easeInOutExpo(t, b, c, d) {
-                if (t == 0) return b;
-                if (t == d) return b + c;
-                if ((t /= d / 2) < 1) return c / 2 * Math.pow(2, 10 * (t - 1)) + b;
-                return c / 2 * (-Math.pow(2, -10 * --t) + 2) + b;
-            }
-
-            // Custom Smooth Scroll Easing for Links
+            // Smooth Scroll Easing for Links
             document.addEventListener('DOMContentLoaded', () => {
                 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
                     anchor.addEventListener('click', function (e) {
