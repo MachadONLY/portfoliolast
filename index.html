@@ -187,6 +187,33 @@
             pointer-events: auto;
             transform: translateY(0);
         }
+
+        /* Desktop Scroll Snapping Tuning */
+        @media (min-width: 768px) {
+            html {
+                scroll-snap-type: y mandatory;
+                scroll-behavior: smooth;
+            }
+
+            /* Sections and Snap Points */
+            section,
+            .snap-child {
+                scroll-snap-align: start;
+                scroll-snap-stop: always;
+            }
+
+            /* Ensure the unified glow container doesn't interfere */
+            #speaking-wrapper {
+                scroll-snap-align: none;
+            }
+
+            .portfolio-snap-point {
+                height: 100vh;
+                width: 1px;
+                background: transparent;
+                pointer-events: none;
+            }
+        }
     </style>
 </head>
 
@@ -222,7 +249,7 @@
     <main class="w-full">
 
         <!-- HERO SECTION -->
-        <section class="min-h-screen relative w-full flex items-center justify-center overflow-hidden">
+        <section id="hero" class="h-screen relative w-full flex items-center justify-center overflow-hidden">
             <!-- Left Section: Mission Text -->
             <div
                 class="absolute left-6 md:left-12 lg:left-24 top-1/4 md:top-1/3 transform -translate-y-1/2 max-w-[80%] md:max-w-sm z-20 pointer-events-none reveal">
@@ -244,11 +271,11 @@
 
         <!-- ABOUT SECTION -->
         <section id="about"
-            class="min-h-screen w-full bg-[#111] flex items-center justify-center p-6 md:p-24 relative z-20 overflow-hidden">
-            <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 items-center relative">
+            class="h-screen w-full bg-[#111] flex items-center justify-center p-6 md:p-24 relative z-20 overflow-hidden">
+            <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 items-center relative h-full">
 
                 <!-- Left: Portrait -->
-                <div class="relative w-full h-[60vh] md:h-[80vh] flex items-center justify-center">
+                <div class="relative w-full h-[50vh] md:h-[70vh] flex items-center justify-center">
                     <!-- Background Text -->
                     <div
                         class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full text-center z-0 pointer-events-none select-none">
@@ -299,8 +326,9 @@
         </section>
 
         <!-- Portfolio Section: Original Side-by-Side Sticky Layout -->
-        <section id="portfolio-tracker" class="relative bg-[#0c0c0c] md:min-h-[250vh] flex flex-col md:flex-row z-30">
-            <div class="md:sticky md:top-0 md:h-screen w-full flex flex-col md:flex-row md:overflow-hidden">
+        <section id="portfolio-tracker"
+            class="relative bg-[#0c0c0c] md:h-screen flex flex-col md:flex-row md:items-start z-30">
+            <div class="md:h-full w-full flex flex-col md:flex-row md:overflow-hidden">
 
                 <!-- Left: Navigation List (Desktop titles, hidden/different on mobile) -->
                 <div
@@ -312,10 +340,10 @@
 
                     <div class="mt-8 space-y-4 reveal reveal-delay-2">
                         <!-- Project Items -->
-                        <div class="project-item text-4xl md:text-6xl font-semibold text-gray-800 transition-colors duration-300 cursor-default"
-                            data-index="0">Red Hat</div>
-                        <div class="project-item text-4xl md:text-6xl font-semibold text-gray-800 transition-colors duration-300 cursor-default"
-                            data-index="1">Morning</div>
+                        <div class="project-item text-4xl md:text-6xl font-semibold text-white transition-colors duration-300 cursor-pointer hover:text-white"
+                            onclick="setActiveProject(0)">Red Hat</div>
+                        <div class="project-item text-4xl md:text-6xl font-semibold text-gray-800 transition-colors duration-300 cursor-pointer hover:text-white"
+                            onclick="setActiveProject(1)">Morning</div>
                     </div>
                 </div>
 
@@ -396,55 +424,39 @@
 
         <!-- Portfolio Logic Script -->
         <script>
-            // Simple Scroll Tracker for Portfolio (Controls Image/Text switching)
-            function updatePortfolioUI() {
-                const container = document.getElementById('portfolio-tracker');
+            // Click-based Portfolio Interaction
+            function setActiveProject(index) {
                 const projects = document.querySelectorAll('.project-item');
                 const images = document.querySelectorAll('.portfolio-image');
 
-                if (!container) return;
+                projects.forEach((el, idx) => {
+                    if (idx === index) {
+                        el.classList.remove('text-gray-800');
+                        el.classList.add('text-white');
+                    } else {
+                        el.classList.add('text-gray-800');
+                        el.classList.remove('text-white');
+                    }
+                });
 
-                const rect = container.getBoundingClientRect();
-                const viewHeight = window.innerHeight;
-
-                const scrollableHeight = rect.height - viewHeight;
-                const scrolled = -rect.top;
-
-                let progress = scrolled / scrollableHeight;
-                if (progress < 0) progress = 0;
-                if (progress > 1) progress = 1;
-
-                const totalProjects = 2;
-                let activeIndex = Math.floor(progress * totalProjects);
-                if (activeIndex >= totalProjects) activeIndex = totalProjects - 1;
-
-                if (rect.top <= viewHeight && rect.bottom >= 0) {
-                    projects.forEach((el, idx) => {
-                        if (idx === activeIndex) {
-                            el.classList.remove('text-gray-800');
-                            el.classList.add('text-white');
-                        } else {
-                            el.classList.add('text-gray-800');
-                            el.classList.remove('text-white');
-                        }
-                    });
-
-                    images.forEach((img, idx) => {
-                        if (idx === activeIndex) {
-                            img.classList.remove('opacity-0', 'pointer-events-none');
-                            img.classList.add('opacity-100', 'pointer-events-auto');
-                        } else {
-                            img.classList.add('opacity-0', 'pointer-events-none');
-                            img.classList.remove('opacity-100', 'pointer-events-auto');
-                        }
-                    });
-                }
+                images.forEach((img, idx) => {
+                    if (idx === index) {
+                        img.classList.remove('opacity-0', 'pointer-events-none');
+                        img.classList.add('opacity-100', 'pointer-events-auto');
+                    } else {
+                        img.classList.add('opacity-0', 'pointer-events-none');
+                        img.classList.remove('opacity-100', 'pointer-events-auto');
+                    }
+                });
             }
 
-            window.addEventListener('scroll', updatePortfolioUI);
+            // Remove scroll listener for portfolio, keep resize just in case we need other logic later
+            // window.addEventListener('scroll', updatePortfolioUI); // Removed scroll scrubbing
 
             // Reveal Animation Observer (Hardware Accelerated)
             document.addEventListener('DOMContentLoaded', () => {
+                setActiveProject(0); // Set initial state to Red Hat
+
                 const revealObserver = new IntersectionObserver((entries) => {
                     entries.forEach(entry => {
                         if (entry.isIntersecting) {
@@ -490,66 +502,77 @@
             });
         </script>
 
-        <!-- FOOTER SECTIONS: Speaking & Connect with Unified Glow -->
-        <div class="relative bg-[#1A1A1A] overflow-hidden">
+        <!-- FOOTER SECTIONS -->
+        <div id="speaking-wrapper" class="relative bg-[#000000] overflow-hidden z-40">
 
             <!-- Ultra-Elegant Unified Orange Glow -->
             <div class="absolute inset-0 pointer-events-none z-0">
                 <!-- Soft Environmental Wash (Wide & Subtle) -->
                 <div
-                    class="absolute top-[20%] right-0 w-full h-[160vh] bg-[radial-gradient(circle_at_80%_0%,rgba(255,100,20,0.12)_0%,rgba(255,80,0,0.05)_40%,transparent_80%)] mix-blend-screen blur-[120px]">
+                    class="absolute top-[10%] right-0 w-full h-[180vh] bg-[radial-gradient(circle_at_70%_20%,rgba(255,90,30,0.15)_0%,rgba(255,60,0,0.08)_40%,transparent_80%)] mix-blend-screen blur-[140px]">
                 </div>
 
-                <!-- Core Light Leak (Under the Bust) -->
+                <!-- Core Light Leak (Under the Bust) - VIVID & ALIVE -->
                 <div
-                    class="absolute top-[35%] right-[5%] w-[60vw] h-[80vh] bg-[radial-gradient(circle_at_center,rgba(255,70,0,0.18)_0%,rgba(255,50,0,0.05)_50%,transparent_100%)] mix-blend-screen blur-[90px] opacity-80">
+                    class="absolute top-[25%] right-[5%] w-[80vw] h-[100vh] bg-[radial-gradient(circle_at_center,rgba(255,80,20,0.35)_0%,rgba(255,40,0,0.15)_45%,transparent_90%)] mix-blend-screen blur-[120px] opacity-100">
                 </div>
 
-                <!-- Descent Warmth (Lower Page) -->
+                <!-- Descent Warmth (Lower Page) - ELEGANT BASE -->
                 <div
-                    class="absolute bottom-0 right-0 w-[100vw] h-[100vh] bg-[radial-gradient(circle_at_bottom_right,rgba(255,60,0,0.15)_0%,rgba(255,40,0,0.02)_60%,transparent_100%)] mix-blend-screen blur-[100px]">
+                    class="absolute bottom-0 right-0 w-[100vw] h-[140vh] bg-[radial-gradient(circle_at_bottom_right,rgba(255,90,30,0.2)_0%,rgba(255,50,0,0.08)_60%,transparent_100%)] mix-blend-screen blur-[130px]">
                 </div>
             </div>
 
             <!-- SPEAKING SECTION -->
             <section id="speaking"
-                class="py-24 md:py-32 w-full relative flex items-center justify-center px-6 md:px-24 z-10">
+                class="py-24 md:py-0 md:h-screen w-full relative flex items-center justify-center px-6 md:px-24 z-10">
 
                 <div class="max-w-7xl relative z-10 grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
                     <!-- Left: Text -->
-                    <div class="reveal">
-                        <h2 class="text-5xl md:text-7xl font-bold text-white mb-4 font-sans reveal-delay-1">Notas</h2>
-                        <p class="text-gray-400 text-lg md:text-xl font-light mb-16 font-sans reveal-delay-2">Aquilo na
-                            qual Acredito
+                    <!-- Left: Text - REFINED & PRESENTE -->
+                    <div class="reveal relative z-20">
+                        <h2
+                            class="text-6xl md:text-8xl font-bold text-white mb-6 font-sans tracking-tight drop-shadow-lg reveal-delay-1">
+                            Notas</h2>
+                        <p
+                            class="text-gray-200 text-xl md:text-2xl font-light mb-16 font-sans tracking-wide leading-relaxed drop-shadow-md reveal-delay-2">
+                            Aquilo na qual Acredito
                         </p>
 
-                        <p class="text-3xl md:text-5xl font-medium leading-tight text-gray-300 mb-8 reveal-delay-3">
+                        <p class="text-3xl md:text-5xl font-medium leading-snug text-white mb-8 reveal-delay-3 drop-shadow-xl"
+                            style="text-shadow: 0 4px 30px rgba(0,0,0,0.5);">
                             "Somos aquilo que fazemos repetidamente. A excelência não é um ato, mas um hábito."
                         </p>
-                        <p class="text-lg md:text-xl text-gray-500 font-light reveal-delay-3">
-                            — Will Durant (parafraseando ideias de Aristóteles)
+                        <p class="text-lg md:text-xl text-gray-400 font-light reveal-delay-3 italic tracking-wider">
+                            — Will Durant <span
+                                class="text-gray-600 text-sm not-italic opacity-70 ml-2">(Aristóteles)</span>
                         </p>
                     </div>
 
-                    <!-- Right: Image -->
+                    <!-- Right: Image - DEEP SHADOW & PRESENCE -->
                     <div
-                        class="relative flex justify-center md:justify-end reveal reveal-delay-2 overflow-hidden md:overflow-visible">
+                        class="relative flex justify-center md:justify-end reveal reveal-delay-2 overflow-hidden md:overflow-visible z-10">
                         <img src="aristotle_bust_final.png" alt="Aristotle Bust"
-                            class="w-[110%] md:w-[140%] max-w-none object-contain drop-shadow-2xl md:translate-x-[15%]">
+                            class="w-[110%] md:w-[150%] max-w-none object-contain md:translate-x-[10%]"
+                            style="filter: drop-shadow(0 0 60px rgba(200,80,20,0.25)) drop-shadow(0 20px 40px rgba(0,0,0,0.8));">
                     </div>
                 </div>
             </section>
 
             <!-- CONNECT SECTION -->
-            <section id="connect" class="min-h-screen w-full relative flex items-center px-6 md:px-24 z-10">
+            <section id="connect"
+                class="py-24 md:py-0 md:h-screen w-full relative flex items-center px-6 md:px-24 z-10">
 
-                <div class="max-w-3xl relative z-10 font-sans reveal">
-                    <h2 class="text-5xl md:text-7xl font-bold text-white mb-8 tracking-tight reveal-delay-1">Let’s
+                <div class="max-w-4xl relative z-10 font-sans reveal text-center md:text-left">
+                    <h2
+                        class="text-6xl md:text-8xl font-bold text-white mb-10 tracking-tighter drop-shadow-2xl reveal-delay-1">
+                        Let’s
                         connect!</h2>
-                    <p class="text-gray-400 text-lg md:text-2xl font-light leading-relaxed reveal-delay-2">
+                    <p
+                        class="text-gray-200 text-xl md:text-3xl font-light leading-relaxed reveal-delay-2 drop-shadow-md max-w-2xl">
                         Seja para colaborarmos em projetos, trocar ideias ou explorar caminhos para criar e escalar algo
                         com
-                        intenção, estou a disposição.
+                        intenção, estou à disposição.
                     </p>
                 </div>
             </section>
